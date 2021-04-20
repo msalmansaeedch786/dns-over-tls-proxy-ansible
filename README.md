@@ -80,6 +80,18 @@ To run this project:
   docker-compose down
 ```
 
+## Ansible Setup
+
+**Ansible can be used to maintain and manage the docker-compose as a service:**
+
+- Running a command
+
+```
+  ansible-playbook setup.yml
+```
+
+<i>Make sure ansible is installed on your system.</i>
+
 ## Testing:
 
 You can test this by making a simple **dig** request
