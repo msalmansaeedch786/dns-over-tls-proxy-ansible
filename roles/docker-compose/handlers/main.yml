@@ -1,0 +1,8 @@
+---
+# handlers file for docker-compose
+
+- name: restart docker-compose
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: docker-compose.service

@@ -1,0 +1,47 @@
+---
+# tasks file for initial-setup
+- block:
+
+  - name: Create proxy directory
+    file:
+      path: /data/proxy
+      owner: ubuntu
+      group: ubuntu
+      mode: '0755'
+      state: directory
+
+  - name: copy Dockerfile
+    template:
+      src: Dockerfile
+      dest: /data/proxy/Dockerfile
+      owner: ubuntu
+      group: ubuntu
+      mode: 0644
+
+  - name: copy docker-compose file
+    template:
+      src: docker-compose.yml
+      dest: /data/proxy/docker-compose.yml
+      owner: ubuntu
+      group: ubuntu
+      mode: 0644
+
+  - name: copy proxy file
+    template:
+      src: proxy.py
+      dest: /data/proxy/proxy.py
+      owner: ubuntu
+      group: ubuntu
+      mode: 0644
+
+  - name: copy supervisord file
+    template:
+      src: supervisord.conf
+      dest: /data/proxy/supervisord.conf
+      owner: ubuntu
+      group: ubuntu
+      mode: 0644
+
+#  notify: restart docker-compose
+  tags:
+    - docker-systemd-compose

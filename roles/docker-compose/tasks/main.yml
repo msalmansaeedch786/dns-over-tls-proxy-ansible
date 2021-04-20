@@ -1,0 +1,23 @@
+---
+# tasks file for docker-compose
+- block:
+
+  - name: Install docker compose service unit file
+    template:
+      src: docker-compose.service
+      dest: /etc/systemd/system/docker-compose.service
+      owner: root
+      group: root
+      mode: 0644
+    notify: restart docker-compose
+
+  - name: enable docker compose services
+    systemd:
+      enabled:  yes
+      state:    started
+      name:     docker-compose.service
+      daemon_reload: yes
+
+  tags:
+    - docker-systemd-compose
+

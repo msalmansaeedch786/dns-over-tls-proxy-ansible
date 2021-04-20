@@ -1,0 +1,23 @@
+[Unit]
+Description=Docker compose
+After=syslog.target
+After=network.target
+After=docker.target
+
+[Service]
+Type=simple
+TimeoutStartSec=3min
+WorkingDirectory=/data/proxy
+EnvironmentFile=/etc/environment
+ExecStartPre=/usr/local/bin/docker-compose build
+ExecStart=/usr/local/bin/docker-compose up
+ExecStop=/usr/local/bin/docker-compose down
+ExecReload=/usr/local/bin/docker-compose run --rm dot-proxy
+ExecReload=/usr/local/bin/docker-compose build
+ExecReload=/usr/local/bin/docker-compose up
+
+#Restart=always
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
