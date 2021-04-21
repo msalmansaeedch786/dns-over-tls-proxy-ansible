@@ -87,7 +87,7 @@ To run this project:
 - Running a command
 
 ```
-  ansible-playbook setup.yml
+  sudo ansible-playbook setup.yml
 ```
 
 <i>Make sure ansible is installed on your system.</i>

@@ -10,6 +10,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 def connect_dns_tls_server(dns, ca_path):
+    # according to: https://tools.ietf.org/html/rfc7858
 
     # opening socket stream connection
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -20,7 +21,7 @@ def connect_dns_tls_server(dns, ca_path):
     ctx = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
     ctx.verify_mode = ssl.CERT_REQUIRED
     ctx.check_hostname = True
-    ctx.load_verify_locations(ca_path)
+    ctx.load_verify_locations(ca_path)                            
 
     # connecting to dns tls cloudflare server
     wrapped_socket = ctx.wrap_socket(sock, server_hostname=dns)
@@ -32,6 +33,9 @@ def connect_dns_tls_server(dns, ca_path):
 def send_message(wrapped_socket, data): 
 
     # making complete tcp packet to send to the dns tls server
+
+    # according to: https://tools.ietf.org/html/rfc1035#section-4.2.2
+    
     tcp_msg = "\x00".encode() + chr(len(data)).encode() + data
     logger.info("TCP Packet to be Send to DNS-TLS Server: %s", str(tcp_msg))
 
@@ -43,13 +47,12 @@ def send_message(wrapped_socket, data):
 
 def extract_result(response):
 
-    # extracting and decoding to response to get the rcode
+    # extracting and decoding response to get the rcode
     rcode = binascii.hexlify(response[:6]).decode("utf-8")
-    logger.info("*****binascii.hexlify(response[:6]).decode(utf-8):***** %s", str(rcode))
-    rcode = rcode[11:]
-    logger.info("*****rcode = rcode[11:]:***** %s", str(rcode))
+    rcode = rcode[11:] 
+
+    # according to: https://tools.ietf.org/html/rfc6895#section-2.3
     
-    # if rcode is not 1, returning extracted response
     if int(rcode, 16) == 1:
         logger.error("Error Processing the Request, RCODE = %s", rcode)
     else:

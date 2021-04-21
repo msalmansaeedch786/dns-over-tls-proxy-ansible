@@ -7,5 +7,5 @@ services:
     image: dot-proxy
     restart: always
     ports:
-      - "53:53/tcp"
-      - "53:53/udp"
+      - "3000:53/tcp"
+      - "3000:53/udp"
